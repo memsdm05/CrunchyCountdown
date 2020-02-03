@@ -158,7 +158,3 @@ class CSVReader:
 
     def getDayNum(self, show):
         return self.csvDict[show]['day_num']
-
-
-
-
