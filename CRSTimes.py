@@ -77,11 +77,12 @@ class ShowList:
             day_num = day2num[day]
             self.showDict[show] = {'time':rtime,
                                    'day_num':day_num, "day": day,
-                                   "href":self.h[hrefindex]}
+                                   "link":self.baseurl + self.h[hrefindex]}
             hrefindex+=1;
 
     def __len__(self):
         return len(self.showDict)
+
 
 # ======== PUBLIC METHODS ======== #
     def debugPrint(self):
@@ -118,9 +119,8 @@ class ShowList:
                         f"{str(self.showDict[show]['day_num'])},"
                         f"{self.getShowLink(show)}\n")
 
-
 class CSVReader:
-    def __init__(self, name):
+    def __init__(self, name="output"):
         self.csvDict = {}
         self.file = name if name[-4:] == ".csv" else name + ".csv"
         self.__buildCSVDict()
@@ -158,3 +158,18 @@ class CSVReader:
 
     def getDayNum(self, show):
         return self.csvDict[show]['day_num']
+
+class ShowObject:
+    def __init__(self, showlist, name):
+        if not isinstance(showlist, ShowList) or not isinstance(showlist, CSVReader) \
+        or not name in showlist.getShowList().keys():
+            print(name)
+
+class ReleaseEvent:
+    def __init__(self, **kwargs):
+        self.__kws = kwargs
+        self.__sortkwarg()
+
+    def __sortkwarg(self):
+        for i in self.__kws.keys():
+            pass

@@ -1,4 +1,4 @@
-from CRSTimes import ShowList
+from CRSTimes import *
 from tkinter import *
 from tkinter.ttk import *
 from tkinter.constants import *
