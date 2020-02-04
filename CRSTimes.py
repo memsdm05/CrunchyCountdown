@@ -2,7 +2,33 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-class ShowList:
+class SimulcastShows:
+    def __init__(self, showdict):
+        self.d = showdict
+
+    def getShowList(self): return self.d
+
+    def hasShow(self, name): return name in self.d.keys()
+
+    def getLink(self, name): return self.d[name]['link']
+
+    def getTime(self, name): return self.d[name]['time']
+
+    def getDay(self, name): return self.d[name]['day']
+
+    def getDayNum(self, name): return int(self.d[name]['day_num'])
+
+    def getShowStat(self, name):
+        return self.showDict[show]['day'] + " " + self.showDict[show]['time']
+
+    def buildShowObjectList(self):
+        s = []
+        for i in self.d.keys():
+            s.append(ShowObject(i, self.d))
+        return s
+
+
+class ScrapeList(SimulcastShows):
     def __init__(self, verbose = False, cutoff = 0):
         self.baseurl = 'https://www.crunchyroll.com'
         self.simul = '/videos/anime/simulcasts'
@@ -17,6 +43,8 @@ class ShowList:
         self.__buildShowHREF()
         self.__buildShowTimes()
         self.__buildCleanData()
+
+        super().__init__(self.showDict)
 
 
     # helper method for pretty printing lists
@@ -83,33 +111,12 @@ class ShowList:
     def __len__(self):
         return len(self.showDict)
 
-    def __str__(self):
-        return "sl"
-
 
 # ======== PUBLIC METHODS ======== #
     def debugPrint(self):
         for i in self.showDict.keys():
             print(i)
             print(self.showDict[i])
-
-    def getShowList(self):
-        return self.showDict
-
-    def getShowStat(self, show):
-        try:
-            return self.showDict[show]['day'] + " " + self.showDict[show]['time']
-        except:
-            return "Show Not Found"
-
-    def getShowLink(self, show):
-        try:
-            return self.baseurl + self.showDict[show]['href']
-        except:
-            return "Show Not Found"
-
-    def getDayNum(self, show):
-        return self.showDict[show]['day_num']
 
     def buildShowCSV(self, name="output"):
         file = name if name[-4:] == ".csv" else name + ".csv"
@@ -122,11 +129,13 @@ class ShowList:
                         f"{str(self.showDict[show]['day_num'])},"
                         f"{self.getShowLink(show)}\n")
 
-class CSVReader:
+class CSVList(SimulcastShows):
     def __init__(self, name="output"):
         self.csvDict = {}
         self.file = name if name[-4:] == ".csv" else name + ".csv"
         self.__buildCSVDict()
+
+        super().__init__(self.csvDict)
 
     def __buildCSVDict(self):
         with open(self.file) as f:
@@ -134,6 +143,9 @@ class CSVReader:
                 line = line.rstrip()
                 i = line.split(",")
                 self.csvDict[i[0]] = {'time': i[1], 'day': i[2], 'day_num': int(i[3]), 'link': i[4]}
+
+    def __len__(self):
+        return len(self.csvDict)
                 
     def debugPrint(self):
         for i in self.csvDict.keys():
@@ -141,43 +153,17 @@ class CSVReader:
                 print(j)
             print()
 
-    def getShowList(self):
-        return self.csvDict
 
-    def getShowStat(self, show):
-        try:
-            return self.csvDict[show]['day'] + " " + self.csvDict[show]['time']
-        except:
-            return "Show Not Found from CVS"
-
-    def __len__(self):
-        return len(self.csvDict)
-
-    def __str__(self):
-        return "cr"
-
-    def getShowLink(self, show):
-        try:
-            return self.baseurl + self.csvDict[show]['href']
-        except:
-            return "Show Not Found from CVS"
-
-    def getDayNum(self, show):
-        return self.csvDict[show]['day_num']
 
 class ShowObject():
-    def __init__(self, name, obj):
-        if str(type(obj)) == "<class 'CRSTimes.CSVReader'>" or str(type(obj)) == "<class 'CRSTimes.ShowList'>":
-            temp = obj.getShowList()
-            if name not in temp:
-                raise LookupError("not a valid show")
-            self.__name = name
-            self.__time = temp[name]['time']
-            self.__day = temp[name]['day']
-            self.__day_num = int(temp[name]['day_num'])
-            self.__link = temp[name]['link']
-        else:
-            raise NotImplementedError
+    def __init__(self, name, temp: dict):
+        if name not in temp:
+            raise LookupError("not a valid show")
+        self.__name = name
+        self.__time = temp[name]['time']
+        self.__day = temp[name]['day']
+        self.__day_num = int(temp[name]['day_num'])
+        self.__link = temp[name]['link']
 
     def name(self): return self.__name
     def time(self): return self.__time
@@ -185,6 +171,7 @@ class ShowObject():
     def day_num(self): return self.__day_num
     def link(self): return self.__link
 
+'''
 
 class ReleaseEvent():
     def __init__(self, **kwargs):
@@ -194,3 +181,4 @@ class ReleaseEvent():
     def __sortkwarg(self):
         for i in self.__kws.keys():
             pass
+'''
