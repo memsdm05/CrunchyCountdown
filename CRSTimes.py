@@ -8,18 +8,18 @@ class SimulcastShows:
 
     def getShowList(self): return self.d
 
-    def hasShow(self, name): return name in self.d.keys()
+    def hasShow(self, name: str): return name in self.d.keys()
 
-    def getLink(self, name): return self.d[name]['link']
+    def getLink(self, name: str): return self.d[name]['link']
 
-    def getTime(self, name): return self.d[name]['time']
+    def getTime(self, name: str): return self.d[name]['time']
 
-    def getDay(self, name): return self.d[name]['day']
+    def getDay(self, name: str): return self.d[name]['day']
 
-    def getDayNum(self, name): return int(self.d[name]['day_num'])
+    def getDayNum(self, name: str): return int(self.d[name]['day_num'])
 
-    def getShowStat(self, name):
-        return self.showDict[show]['day'] + " " + self.showDict[show]['time']
+    def getShowStat(self, name: str):
+        return self.d[name]['day'] + " " + self.d[name]['time']
 
     def buildShowObjectList(self):
         s = []
