@@ -83,6 +83,9 @@ class ShowList:
     def __len__(self):
         return len(self.showDict)
 
+    def __str__(self):
+        return "sl"
+
 
 # ======== PUBLIC METHODS ======== #
     def debugPrint(self):
@@ -150,6 +153,9 @@ class CSVReader:
     def __len__(self):
         return len(self.csvDict)
 
+    def __str__(self):
+        return "cr"
+
     def getShowLink(self, show):
         try:
             return self.baseurl + self.csvDict[show]['href']
@@ -159,13 +165,28 @@ class CSVReader:
     def getDayNum(self, show):
         return self.csvDict[show]['day_num']
 
-class ShowObject:
-    def __init__(self, showlist, name):
-        if not isinstance(showlist, ShowList) or not isinstance(showlist, CSVReader) \
-        or not name in showlist.getShowList().keys():
-            print(name)
+class ShowObject():
+    def __init__(self, name, obj):
+        if str(type(obj)) == "<class 'CRSTimes.CSVReader'>" or str(type(obj)) == "<class 'CRSTimes.ShowList'>":
+            temp = obj.getShowList()
+            if name not in temp:
+                raise LookupError("not a valid show")
+            self.__name = name
+            self.__time = temp[name]['time']
+            self.__day = temp[name]['day']
+            self.__day_num = int(temp[name]['day_num'])
+            self.__link = temp[name]['link']
+        else:
+            raise NotImplementedError
 
-class ReleaseEvent:
+    def name(self): return self.__name
+    def time(self): return self.__time
+    def day(self): return self.__day
+    def day_num(self): return self.__day_num
+    def link(self): return self.__link
+
+
+class ReleaseEvent():
     def __init__(self, **kwargs):
         self.__kws = kwargs
         self.__sortkwarg()
