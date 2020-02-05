@@ -57,7 +57,11 @@ class ScrapeList(SimulcastShows):
     # scrapes https://www.crunchyroll.com/videos/anime/simulcasts for hrefs of shows
     def __buildShowHREF(self):
         if self.v: print("Finding Shows...")
-        r = requests.get(self.baseurl + self.simul)
+        try:
+            r = requests.get(self.baseurl + self.simul)
+        except requests.ConnectionError:
+            quit()
+
         simulSoup = BeautifulSoup(r.text, "lxml")
         li = simulSoup.find_all('li', {'itemtype': "http://schema.org/TVSeries"})
         for show in li:
@@ -170,15 +174,3 @@ class ShowObject():
     def day(self): return self.__day
     def day_num(self): return self.__day_num
     def link(self): return self.__link
-
-'''
-
-class ReleaseEvent():
-    def __init__(self, **kwargs):
-        self.__kws = kwargs
-        self.__sortkwarg()
-
-    def __sortkwarg(self):
-        for i in self.__kws.keys():
-            pass
-'''
