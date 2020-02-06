@@ -22,8 +22,8 @@ class SimulcastShows:
         return self.d[name]['day'] + " " + self.d[name]['time']
 
     def getTimestamp(self, name: str):
-        t = self.getTime().split(":")
-        return self.getDayNum() * 1444 + int(t[0]) * 60 + int(t[1])
+        t = self.getTime(name).split(":")
+        return self.getDayNum(name) * 1440 + int(t[0]) * 60 + int(t[1])
 
     def buildShowObjectList(self):
         s = []
