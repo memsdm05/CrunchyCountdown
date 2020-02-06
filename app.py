@@ -19,7 +19,8 @@ class App:
         self.combo.selection_clear()
 
         self.combo.pack(side=TOP, expand=False, fill=BOTH)
-        self.cd = Label(self.master, text="00:00:00:00", anchor=CENTER, font=("Helvetica", 72))
+        self.cd = Label(self.master, text="00:00:00:00", anchor=CENTER, font=("Helvetica", 72),
+                        justify='center')
         self.cd.pack(side=TOP, expand=True, fill=BOTH)
 
         self.master.minsize(400, 150)
@@ -27,9 +28,18 @@ class App:
 
     def updateHandler(self):
 
-        self.cd.config()
+        d = datetime.now()
+        a = d.strftime('%W:%H:%M:%S')
 
-        self.master.after(3, self.editLabel)
+        size = self.master.winfo_width()//6 if self.master.winfo_width() < self.master.winfo_height() else \
+            self.master.winfo_height()//3
+
+        print(self.master.winfo_width(), self.master.winfo_height())
+
+        self.cd.config(text=a, font=("Helvetica", size))
+
+        self.master.after(100, self.updateHandler)
+
 
 if __name__ == '__main__':
     App().master.mainloop()
