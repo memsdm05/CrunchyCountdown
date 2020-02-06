@@ -21,6 +21,10 @@ class SimulcastShows:
     def getShowStat(self, name: str):
         return self.d[name]['day'] + " " + self.d[name]['time']
 
+    def getTimestamp(self, name: str):
+        t = self.getTime().split(":")
+        return self.getDayNum() * 1444 + int(t[0]) * 60 + int(t[1])
+
     def buildShowObjectList(self):
         s = []
         for i in self.d.keys():
@@ -116,7 +120,7 @@ class ScrapeList(SimulcastShows):
         return len(self.showDict)
 
 
-# ======== PUBLIC METHODS ======== #
+    # ======== PUBLIC METHODS ======== #
     def debugPrint(self):
         for i in self.showDict.keys():
             print(i)

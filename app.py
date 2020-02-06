@@ -37,8 +37,8 @@ class App:
 
         # print(self.showObj[23].timestamp() - self.getCurrentTimestamp())
 
-        size = self.master.winfo_width()//6 if self.master.winfo_width() < self.master.winfo_height() else \
-            self.master.winfo_height()//3
+        size = self.master.winfo_width()// 4 if self.master.winfo_width() < self.master.winfo_height() else \
+            self.master.winfo_height()//   3
 
 
 
