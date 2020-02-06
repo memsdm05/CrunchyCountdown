@@ -11,6 +11,7 @@ class App:
         self.master.minsize()
 
         shows = CSVList()
+        self.showObj = shows.buildShowObjectList()
 
         self.combo = Combobox(self.master)
         self.combo['values'] = tuple(shows.getShowList())
@@ -28,18 +29,25 @@ class App:
 
     def updateHandler(self):
 
-        d = datetime.now()
-        a = d.strftime('%W:%H:%M:%S')
+        self.currentShow = self.combo.get()
+
+        print(self.currentShow)
+        self.now = datetime.now()
+        a = self.now.strftime('%W:%H:%M:%S')
+
+        # print(self.showObj[23].timestamp() - self.getCurrentTimestamp())
 
         size = self.master.winfo_width()//6 if self.master.winfo_width() < self.master.winfo_height() else \
             self.master.winfo_height()//3
 
-        print(self.master.winfo_width(), self.master.winfo_height())
+
 
         self.cd.config(text=a, font=("Helvetica", size))
 
         self.master.after(100, self.updateHandler)
 
+    def getCurrentTimestamp(self):
+        return self.now.weekday() * 1444 + self.now.hour * 60 + self.now.minute
 
 if __name__ == '__main__':
     App().master.mainloop()

@@ -107,7 +107,7 @@ class ScrapeList(SimulcastShows):
             rtime = datetime.strftime(datetime.strptime(time[:-2]+am_pm.upper(), "%I:%M%p"), "%H:%M")
 
             day_num = day2num[day]
-            self.showDict[show] = {'time':rtime,
+            self.showDict[show.replace(', ', ' ')] = {'time':rtime,
                                    'day_num':day_num, "day": day,
                                    "link":self.baseurl + self.h[hrefindex]}
             hrefindex+=1;
@@ -174,3 +174,7 @@ class ShowObject():
     def day(self): return self.__day
     def day_num(self): return self.__day_num
     def link(self): return self.__link
+
+    def timestamp(self):
+        t = self.time().split(":")
+        return self.day_num() * 1444 + int(t[0]) * 60 + int(t[1])
