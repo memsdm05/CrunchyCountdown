@@ -44,6 +44,7 @@ class ScrapeList(SimulcastShows):
         self.t = {}
         self.showDict = {}
 
+        # Sequence for ScrapeList
         self.__buildShowHREF()
         self.__buildShowTimes()
         self.__buildCleanData()
@@ -75,7 +76,7 @@ class ScrapeList(SimulcastShows):
         self.h = list(dict.fromkeys(self.h)) # remove dupes
         if self.c > 0: self.h = self.h[:self.c]
 
-    # scrapes shows for times and dates
+    # goes through the href list and scrapes time and week day
     def __buildShowTimes(self):
         # r = requests.get(self.baseurl + self.h[0])
         # showSoup = BeautifulSoup(r.text, "lxml")
@@ -95,11 +96,12 @@ class ScrapeList(SimulcastShows):
             if self.v: print("{:70s} {:10s}".format(show, time))
             self.t[show] = time
 
-
+    # removes dupes and creates a dictionary
     def __buildCleanData(self):
         if self.v: print("Cleaning...")
         day2num = {'Mondays': 0, 'Tuesdays': 1, 'Wednesdays': 2, 'Thursdays': 3, 'Fridays': 4, 'Saturdays': 5,
                    'Sundays': 6}
+        # converts the weekday Strings to dayNum
 
         hrefindex = 0;
         for show in self.t.keys():
@@ -154,7 +156,8 @@ class CSVList(SimulcastShows):
 
     def __len__(self):
         return len(self.csvDict)
-                
+
+    # ======== PUBLIC METHODS ======== #
     def debugPrint(self):
         for i in self.csvDict.keys():
             for j in self.csvDict[i].values():

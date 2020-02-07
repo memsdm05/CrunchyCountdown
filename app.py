@@ -47,7 +47,7 @@ class App:
         temp -= hours * 60
         mins = temp
 
-        return f"{str(days) if len(str(days)) > 1 else '0'+ str(days)}" \
+        return f"{'0' + str(days)}" \
                f":{str(hours) if len(str(hours)) > 1 else '0'+ str(hours)}:" \
                f"{str(mins) if len(str(mins)) > 1 else '0'+ str(mins)}:"
 
@@ -57,14 +57,14 @@ class App:
         self.currentShow = self.combo.get()
 
         self.now = datetime.now()
-        a = self.getString() + str(60-self.now.second)
-
-        self.getString()
+        t = str(59-self.now.second)
+        a = self.getString() + (t if len(t) > 1 else '0'+t)
 
         # print(self.showObj[23].timestamp() - self.getCurrentTimestamp())
 
-        size = self.master.winfo_width()// 4 if self.master.winfo_width() < self.master.winfo_height() else \
-            self.master.winfo_height()//   3
+        # todo fix text scaling
+        size = self.master.winfo_width()// 3 if self.master.winfo_width() < self.master.winfo_height() else \
+            self.master.winfo_height()//   4
 
 
 
