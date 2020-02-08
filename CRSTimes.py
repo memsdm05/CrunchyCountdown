@@ -25,6 +25,10 @@ class SimulcastShows:
         t = self.getTime(name).split(":")
         return self.getDayNum(name) * 1440 + int(t[0]) * 60 + int(t[1])
 
+    def showDeltatime(self, name, current):
+        temp = self.getTimestamp(name) - current
+        return temp if temp > 0 else 10080 + temp
+
     def buildShowObjectList(self):
         s = []
         for i in self.d.keys():
@@ -123,6 +127,13 @@ class ScrapeList(SimulcastShows):
 
 
     # ======== PUBLIC METHODS ======== #
+    def canInternet(self):
+        try:
+            requests.get(self.baseurl)
+            return True
+        except:
+            return False
+
     def debugPrint(self):
         for i in self.showDict.keys():
             print(i)
